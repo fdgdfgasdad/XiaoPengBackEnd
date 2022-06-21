@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.exam.mapper.UserMapper">
+
+    <select id="getAllUser" resultType="com.exam.pojo.User">
+        select *
+        from exam.user
+    </select>
+
+    <select id="getUserByUid" parameterType="Integer" resultType="com.exam.pojo.User">
+        select *
+        from exam.user
+        where uid = #{uid}
+    </select>
+
+    <select id="getUserByUsername" parameterType="String" resultType="com.exam.pojo.User">
+        select *
+        from exam.user
+        where username = #{username}
+    </select>
+
+    <select id="getPasswordByUid" parameterType="Integer" resultType="String">
+        select password
+        from exam.user
+        where uid = #{uid}
+    </select>
+
+    <select id="getPasswordByUsername" parameterType="String" resultType="String">
+        select password
+        from exam.user
+        where username = #{username}
+    </select>
+
+    <select id="getUsernameByUid" parameterType="Integer" resultType="String">
+        select username
+        from exam.user
+        where uid = #{uid}
+    </select>
+
+    <select id="getUidByUsername" parameterType="String" resultType="Integer">
+        select uid
+        from exam.user
+        where username = #{username}
+    </select>
+
+    <update id="setPassword" parameterType="com.exam.pojo.User">
+        update exam.user
+        set password=#{user.password}
+        where uid = #{user.uid}
+    </update>
+
+    <insert id="saveUser" parameterType="com.exam.pojo.User" useGeneratedKeys="true" keyProperty="uid">
+        insert into exam.user (uid, username, password, phone)
+        values (#{user.uid}, #{user.username}, #{user.password}, #{user.phone})
+    </insert>
+
+
+
+    <select id="getUserCount" resultType="Integer">
+        select count(uid)
+        from exam.user
+    </select>
+
+</mapper>
