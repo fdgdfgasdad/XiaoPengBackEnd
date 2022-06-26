@@ -29,4 +29,10 @@ public interface QuestionMapper {
     @Select("select * from exam.question where type = '问答' and qid = #{qid}")
     Question getSubjectiveQuestionsByID(@Param("qid") Integer qid);
 
+    @Select("select * from exam.question where type = '单选'")
+    List<Question> getSelectiveQuestions();
+
+    @Select("select * from exam.question where type = '单选' and qid = #{qid}")
+    Question getSelectiveQuestionsByID(@Param("qid") Integer qid);
+
 }

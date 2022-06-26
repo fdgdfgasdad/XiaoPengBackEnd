@@ -3,7 +3,6 @@ package com.exam.controller;
 import com.exam.pojo.User;
 import com.exam.result.Result;
 import com.exam.service.UserService;
-import com.github.pagehelper.Page;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -69,9 +68,9 @@ public class UserController {
     }
 
     @GetMapping("getQuestionList")
-    public Result getQuestionList(@RequestParam("number") Integer number)
+    public Result getQuestionList(@RequestParam("selNum") Integer selNum, @RequestParam("subNum") Integer subNum)
     {
-        return userService.getSubjectiveQuestionList(number);
+        return userService.getQuestionList(selNum, subNum);
     }
 
     @GetMapping("getArticleList")

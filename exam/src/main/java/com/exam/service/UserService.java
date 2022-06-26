@@ -1,10 +1,7 @@
 package com.exam.service;
 
 import com.exam.mapper.*;
-import com.exam.pojo.Choice;
-import com.exam.pojo.Exampaper;
-import com.exam.pojo.Question;
-import com.exam.pojo.User;
+import com.exam.pojo.*;
 import com.exam.result.Result;
 import com.exam.result.ResultCode;
 import com.exam.util.JwtUtil;
@@ -143,20 +140,33 @@ public class UserService {
     }
 
     //新增
-    public Result getSubjectiveQuestionList(Integer number) {
-        List<Question> questionList = new ArrayList<>();
-        for (int i = 0; i < number; i++)
+    public Result getQuestionList(Integer selNum, Integer subNum) {
+        List<QuestionResult> questionList = new ArrayList<>();
+        Random r = new Random();
+        for (int i = 0; i < selNum; i++)
         {
-            Random r = new Random();
+            Integer qid = r.nextInt(5) + 1;
+            Question question = questionMapper.getSelectiveQuestionsByID(qid);
+            QuestionResult questionResult = new QuestionResult();
+            questionResult.createQuestion(question);
+            questionResult.setChoices(choiceMapper.getChoiceByQid(question.getQid()));
+            questionList.add(questionResult);
+        }
+        for (int i = 0; i < subNum; i++)
+        {
             Integer qid = r.nextInt(11) + 300;
             Question question = questionMapper.getSubjectiveQuestionsByID(qid);
-            questionList.add(question);
+            QuestionResult questionResult = new QuestionResult();
+            questionResult.createQuestion(question);
+            questionResult.setChoices(null);
+            questionList.add(questionResult);
         }
         Result result = Result.success();
         result.setData(questionList);
         return result;
     }
 
+    // 根据类型获取文章题目
     public Result getTitle(String type) {
         List<String> titleList = articleMapper.getArticleTitleByType(type);
         Result result = Result.success();
@@ -164,6 +174,7 @@ public class UserService {
         return result;
     }
 
+    // 根据题目获取文章内容
     public Result getContent(String title) {
         String content = articleMapper.getArticleContentByTitle(title);
         Result result = Result.success();
