@@ -16,6 +16,8 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.servlet.http.HttpServletRequest;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.LineNumberReader;
 import java.util.UUID;
 
 @Slf4j
@@ -131,15 +133,18 @@ public class UserController {
 
         }
 
-        Integer grade = userService.getSingleGrade(qid);
+        log.info(filePath + fileName);
 
-        userService.saveGrade(uid, pid, grade);
+        Result result = userService.getSingleGrade(filePath + fileName, qid, uid, pid);
 
-        Result result = Result.success();
+
 
         return result;
 
     }
+
+
+
 
 }
 

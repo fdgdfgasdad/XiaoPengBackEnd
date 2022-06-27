@@ -13,6 +13,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.io.*;
+import java.nio.charset.Charset;
 import java.util.*;
 
 
@@ -185,35 +187,78 @@ public class UserService {
     public Result getGrade(Integer uid, Integer pid) {
 
         PaperGrade paperGradeByUidPid = paperGradeMapper.getPaperGradeByUidPid(uid, pid);
-        Integer grade = paperGradeByUidPid.getGrade() / 2;
-        paperGradeByUidPid.setGrade(grade);
-        paperGradeMapper.updatePaperGrade(paperGradeByUidPid);
+        Double grade = paperGradeByUidPid.getScore();
         Result result = Result.success();
         result.setData(grade);
         return result;
     }
 
-    public void saveGrade(Integer uid, Integer pid, Integer grade) {
-        PaperGrade paperGradeByUidPid = paperGradeMapper.getPaperGradeByUidPid(uid, pid);
-        if (paperGradeByUidPid == null)
-        {
-            PaperGrade paperGrade = new PaperGrade();
-            paperGrade.setGrade(grade);
-            paperGrade.setPid(pid);
-            paperGrade.setUid(uid);
-            paperGradeMapper.savePaperGrade(paperGrade);
-        } else {
-            paperGradeByUidPid.setGrade(paperGradeByUidPid.getGrade() + grade);
-            paperGradeMapper.updatePaperGrade(paperGradeByUidPid);
-        }
-        return;
-    }
 
-    public Integer getSingleGrade(Integer qid) {
+
+    public Result getSingleGrade(String path, Integer qid, Integer uid, Integer pid) {
 
         String answerByQid = questionMapper.getAnswerByQid(qid);
+        Result result = pyfileUpload(path, answerByQid, uid, pid);
 
-        Integer grade = 0;
-        return grade;
+
+        return result;
+    }
+
+    public Result pyfileUpload(String path, String answer, Integer uid, Integer pid)   {
+        String ans = "";
+        String intelligibility;
+        String integrity;
+        String logicality;
+        String accuracy;
+        String score;
+        try {
+            //这个方法是类似隐形开启了命令执行器，输入指令执行python脚本
+            String command = "python D:\\file\\main.py" +" --aa="+ path + " --bb=" + answer;
+            Process p = Runtime.getRuntime().exec(command);
+            //这种方式获取返回值的方式是需要用python打印输出，然后java去获取命令行的输出，在java返回
+            InputStream inStream = p.getInputStream();
+            InputStreamReader inReader = new InputStreamReader(inStream,Charset.forName("GBK"));
+            BufferedReader inBuffer = new BufferedReader(inReader);
+
+            ans = inBuffer.readLine();
+            intelligibility = inBuffer.readLine();
+            integrity = inBuffer.readLine();
+            logicality = inBuffer.readLine();
+            accuracy = inBuffer.readLine();
+            score = inBuffer.readLine();
+
+            PaperGrade paperGrade = paperGradeMapper.getPaperGradeByUidPid(uid, pid);
+            if (paperGrade == null)
+            {
+                paperGrade = new PaperGrade();
+                paperGrade.setIntelligibility(Double.parseDouble(intelligibility) / 2);
+                paperGrade.setIntegrity(Double.parseDouble(integrity) / 2);
+                paperGrade.setLogicality(Double.parseDouble(logicality) / 2);
+                paperGrade.setAccuracy(Double.parseDouble(accuracy) / 2);
+                paperGrade.setScore(Double.parseDouble(score) / 2);
+                paperGrade.setPid(pid);
+                paperGrade.setUid(uid);
+                paperGradeMapper.savePaperGrade(paperGrade);
+            } else {
+                paperGrade.setIntelligibility(paperGrade.getIntelligibility() + Double.parseDouble(intelligibility) / 2);
+                paperGrade.setIntegrity(paperGrade.getIntegrity() + Double.parseDouble(integrity) / 2);
+                paperGrade.setLogicality(paperGrade.getLogicality() + Double.parseDouble(logicality) / 2);
+                paperGrade.setAccuracy(paperGrade.getAccuracy() + Double.parseDouble(accuracy) / 2);
+                paperGrade.setScore(paperGrade.getScore() + Double.parseDouble(score) / 2);
+                paperGradeMapper.updatePaperGrade(paperGrade);
+            }
+            log.info(ans);
+            log.info(intelligibility);
+            log.info(integrity);
+            log.info(logicality);
+            log.info(accuracy);
+            log.info(score);
+
+        } catch (IOException e) {
+            System.out.println("调用python脚本并读取结果时出错：" + e.getMessage());
+        }
+        Result result = Result.success();
+        result.setData(ans);
+        return result;
     }
 }

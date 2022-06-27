@@ -80,9 +80,11 @@ INSERT INTO `exampaper` VALUES ('1', '陪练训练', '陪练题目');
 DROP TABLE IF EXISTS `papergrade`;
 CREATE TABLE `papergrade` (
   `rid` bigint unsigned NOT NULL AUTO_INCREMENT,
-  `all_count` int DEFAULT NULL,
-  `grade` int DEFAULT NULL,
-  `wrong_count` int DEFAULT NULL,
+  `intelligibility` int(255) DEFAULT NULL,
+  `integrity` int(255) DEFAULT NULL,
+  `logicality` int(255) DEFAULT NULL,
+  `accuracy` int(255) DEFAULT NULL,
+  `score` int(255) DEFAULT NULL,
   `pid` bigint DEFAULT NULL,
   `uid` bigint DEFAULT NULL,
   PRIMARY KEY (`rid`) USING BTREE,
