@@ -6,6 +6,7 @@ public enum ResultCode {
     NULL_USERNAME(200, "用户名为空"),
     NULL_PASSWORD(200, "密码为空"),
     NULL_UID(200, "用户ID为空"),
+    NULL_FILE(200,"文件为空"),
     WRONG_PASSWORD(200,"密码错误"),
     NONEXISTENT_USERNAME(200,"用户名为空");
 

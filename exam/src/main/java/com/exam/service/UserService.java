@@ -182,11 +182,38 @@ public class UserService {
         return result;
     }
 
-    public Result getGrade(Object object) {
+    public Result getGrade(Integer uid, Integer pid) {
 
-
+        PaperGrade paperGradeByUidPid = paperGradeMapper.getPaperGradeByUidPid(uid, pid);
+        Integer grade = paperGradeByUidPid.getGrade() / 2;
+        paperGradeByUidPid.setGrade(grade);
+        paperGradeMapper.updatePaperGrade(paperGradeByUidPid);
         Result result = Result.success();
-
+        result.setData(grade);
         return result;
+    }
+
+    public void saveGrade(Integer uid, Integer pid, Integer grade) {
+        PaperGrade paperGradeByUidPid = paperGradeMapper.getPaperGradeByUidPid(uid, pid);
+        if (paperGradeByUidPid == null)
+        {
+            PaperGrade paperGrade = new PaperGrade();
+            paperGrade.setGrade(grade);
+            paperGrade.setPid(pid);
+            paperGrade.setUid(uid);
+            paperGradeMapper.savePaperGrade(paperGrade);
+        } else {
+            paperGradeByUidPid.setGrade(paperGradeByUidPid.getGrade() + grade);
+            paperGradeMapper.updatePaperGrade(paperGradeByUidPid);
+        }
+        return;
+    }
+
+    public Integer getSingleGrade(Integer qid) {
+
+        String answerByQid = questionMapper.getAnswerByQid(qid);
+
+        Integer grade = 0;
+        return grade;
     }
 }

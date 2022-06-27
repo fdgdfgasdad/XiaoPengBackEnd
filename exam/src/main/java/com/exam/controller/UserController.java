@@ -1,13 +1,22 @@
 package com.exam.controller;
 
+import com.exam.mapper.PaperGradeMapper;
 import com.exam.pojo.User;
 import com.exam.result.Result;
+import com.exam.result.ResultCode;
 import com.exam.service.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+
+import javax.servlet.http.HttpServletRequest;
+import java.io.File;
+import java.io.IOException;
+import java.util.UUID;
 
 @Slf4j
 @Controller
@@ -86,9 +95,53 @@ public class UserController {
     }
 
     @PostMapping("get_grade")
-    public Result getGrade(@RequestBody Object object)
+    public Result getGrade(@RequestParam("uid") Integer uid, @RequestParam("pid") Integer pid)
     {
-        return userService.getGrade(object);
+        return userService.getGrade(uid, pid);
+    }
+
+    @PostMapping(value = "/fileUpload")
+    public Result fileUpload(@RequestParam(value = "file") MultipartFile file, @RequestParam("qid") Integer qid, @RequestParam("uid") Integer uid, @RequestParam("pid") Integer pid) {
+
+        if (file.isEmpty()) {
+            return Result.failure(ResultCode.NULL_FILE);
+        }
+
+        String fileName = file.getOriginalFilename();
+
+        String suffixName = fileName.substring(fileName.lastIndexOf("."));
+
+        String filePath = "D://file//";
+
+        fileName = UUID.randomUUID() + suffixName;
+
+        File dest = new File(filePath + fileName);
+
+        if (!dest.getParentFile().exists()) {
+            dest.getParentFile().mkdirs();
+        }
+
+        try {
+
+            file.transferTo(dest);
+
+        } catch (IOException e) {
+
+            e.printStackTrace();
+
+        }
+
+        Integer grade = userService.getSingleGrade(qid);
+
+        userService.saveGrade(uid, pid, grade);
+
+        Result result = Result.success();
+
+        return result;
+
     }
 
 }
+
+
+
