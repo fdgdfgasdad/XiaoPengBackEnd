@@ -10,10 +10,29 @@ Target Server Type    : MYSQL
 Target Server Version : 80023
 File Encoding         : 65001
 
-Date: 2022-06-21 17:18:38
+Date: 2022-06-28 15:59:23
 */
 
 SET FOREIGN_KEY_CHECKS=0;
+
+-- ----------------------------
+-- Table structure for article
+-- ----------------------------
+DROP TABLE IF EXISTS `article`;
+CREATE TABLE `article` (
+  `aid` bigint unsigned NOT NULL AUTO_INCREMENT,
+  `pid` int DEFAULT NULL,
+  `title` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL,
+  `content` varchar(5000) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL,
+  `type` varchar(20) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL,
+  PRIMARY KEY (`aid`) USING BTREE
+) ENGINE=InnoDB AUTO_INCREMENT=152 DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC;
+
+-- ----------------------------
+-- Records of article
+-- ----------------------------
+INSERT INTO `article` VALUES ('150', '1', '小鹏P7', '小鹏汽车智能系统以中控大屏为核心，它除了是一个互联网的入口和终端外，更多的是一个智能化的平台。中控大屏取代了传统中控实体按钮，而代之以一系列的虚拟按钮。小鹏汽车的智能控制系统专注于对车本身的智能控制，而非简单的互联网娱乐。通过中控大屏，可以方便的控制方向盘位置、座椅位置、车灯开关、车窗升降、空调设定等，还可以进行驾驶风格的选择、底盘刚度的调节、制动能量回收强度等的调节等等。', '汽车');
+INSERT INTO `article` VALUES ('151', '1', '如何问答', '应该这样问答！', '问答教程');
 
 -- ----------------------------
 -- Table structure for choice
@@ -80,21 +99,22 @@ INSERT INTO `exampaper` VALUES ('1', '陪练训练', '陪练题目');
 DROP TABLE IF EXISTS `papergrade`;
 CREATE TABLE `papergrade` (
   `rid` bigint unsigned NOT NULL AUTO_INCREMENT,
-  `intelligibility` int(255) DEFAULT NULL,
-  `integrity` int(255) DEFAULT NULL,
-  `logicality` int(255) DEFAULT NULL,
-  `accuracy` int(255) DEFAULT NULL,
-  `score` int(255) DEFAULT NULL,
+  `intelligibility` double DEFAULT NULL,
+  `integrity` double DEFAULT NULL,
+  `logicality` double DEFAULT NULL,
+  `accuracy` double DEFAULT NULL,
+  `score` double DEFAULT NULL,
   `pid` bigint DEFAULT NULL,
   `uid` bigint DEFAULT NULL,
   PRIMARY KEY (`rid`) USING BTREE,
   KEY `FKmblvyjlk9x7rrm7mvqtbedycc` (`pid`) USING BTREE,
   KEY `FKsfc96jri4p4ukkdaitjt5rk13` (`uid`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC;
+) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC;
 
 -- ----------------------------
 -- Records of papergrade
 -- ----------------------------
+INSERT INTO `papergrade` VALUES ('12', '186.94132906080722', '240', '240', '233.00613770000004', '228.1945750941211', '1', '1');
 
 -- ----------------------------
 -- Table structure for question
@@ -107,7 +127,7 @@ CREATE TABLE `question` (
   `type` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL,
   `answer` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`qid`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=241 DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC;
+) ENGINE=InnoDB AUTO_INCREMENT=312 DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC;
 
 -- ----------------------------
 -- Records of question
@@ -119,11 +139,24 @@ INSERT INTO `question` VALUES ('4', '1', '小鹏汽车新零售销售流程有�
 INSERT INTO `question` VALUES ('5', '1', '下面描述正确的是', '单选', '2');
 INSERT INTO `question` VALUES ('6', '1', '下列哪些是属于客户的一级顾虑', '单选', '2');
 INSERT INTO `question` VALUES ('7', '1', '小鹏汽车的智能系统是', '问答', '小鹏汽车智能系统以中控大屏为核心，它除了是一个互联网的入口和终端外，更多的是一个智能化的平台。中控大屏取代了传统中控实体按钮，而代之以一系列的虚拟按钮。小鹏汽车的智能控制系统专注于对车本身的智能控制，而非简单的互联网娱乐。通过中控大屏，可以方便的控制方向盘位置、座椅位置、车灯开关、车窗升降、空调设定等，还可以进行驾驶风格的选择、底盘刚度的调节、制动能量回收强度等的调节等等。');
+INSERT INTO `question` VALUES ('8', '1', 'fdgfdg', '问答', '作为一款20万以内的纯电动智能SUV来说，它综合实力更加均衡，在同级别的车型中性价比也非常高。对于热爱生活又喜欢尝试新鲜事物的年轻人来说，小鹏G3i无疑是一款值得推荐的好车。');
 INSERT INTO `question` VALUES ('236', '1', '小鹏汽车目前有那几款车？', '单选', '2');
 INSERT INTO `question` VALUES ('237', '1', '小鹏汽车目前有那几款车？', '单选', '2');
 INSERT INTO `question` VALUES ('238', '1', '小鹏汽车目前有那几款车？', '单选', '2');
 INSERT INTO `question` VALUES ('239', '1', '小鹏汽车目前有那几款车？', '单选', '2');
 INSERT INTO `question` VALUES ('240', '1', '小鹏汽车目前有那几款车？', '单选', '2');
+INSERT INTO `question` VALUES ('300', '1', '小鹏汽车好吗', '问答', '好');
+INSERT INTO `question` VALUES ('301', '1', '小鹏汽车帅吗', '问答', '帅');
+INSERT INTO `question` VALUES ('302', '1', '小鹏汽车有多好', '问答', '非常好');
+INSERT INTO `question` VALUES ('303', '1', '小鹏汽车有多快', '问答', '非常快');
+INSERT INTO `question` VALUES ('304', '1', '小鹏汽车能充电吗', '问答', '能');
+INSERT INTO `question` VALUES ('305', '1', '小鹏汽车强吗', '问答', '强');
+INSERT INTO `question` VALUES ('306', '1', '喜欢小鹏汽车吗', '问答', '喜欢');
+INSERT INTO `question` VALUES ('307', '1', '小鹏汽车怎么样', '问答', '很好');
+INSERT INTO `question` VALUES ('308', '1', '小鹏汽车好玩吗', '问答', '好玩');
+INSERT INTO `question` VALUES ('309', '1', '小鹏汽车便宜吗', '问答', '便宜');
+INSERT INTO `question` VALUES ('310', '1', '小鹏汽车多少钱', '问答', '100元');
+INSERT INTO `question` VALUES ('311', '1', '小鹏汽车贵吗', '问答', '不贵');
 
 -- ----------------------------
 -- Table structure for user
@@ -141,35 +174,3 @@ CREATE TABLE `user` (
 -- Records of user
 -- ----------------------------
 INSERT INTO `user` VALUES ('1', '测试1', '123456', null);
-
--- ----------------------------
--- Records of question
--- ----------------------------
-INSERT INTO `question` VALUES ('300', '1', '小鹏汽车好吗', '问答', '好');
-INSERT INTO `question` VALUES ('301', '1', '小鹏汽车帅吗', '问答', '帅');
-INSERT INTO `question` VALUES ('302', '1', '小鹏汽车有多好', '问答', '非常好');
-INSERT INTO `question` VALUES ('303', '1', '小鹏汽车有多快', '问答', '非常快');
-INSERT INTO `question` VALUES ('304', '1', '小鹏汽车能充电吗', '问答', '能');
-INSERT INTO `question` VALUES ('305', '1', '小鹏汽车强吗', '问答', '强');
-INSERT INTO `question` VALUES ('306', '1', '喜欢小鹏汽车吗', '问答', '喜欢');
-INSERT INTO `question` VALUES ('307', '1', '小鹏汽车怎么样', '问答', '很好');
-INSERT INTO `question` VALUES ('308', '1', '小鹏汽车好玩吗', '问答', '好玩');
-INSERT INTO `question` VALUES ('309', '1', '小鹏汽车便宜吗', '问答', '便宜');
-INSERT INTO `question` VALUES ('310', '1', '小鹏汽车多少钱', '问答', '100元');
-INSERT INTO `question` VALUES ('311', '1', '小鹏汽车贵吗', '问答', '不贵');
-
--- ----------------------------
--- Table structure for article
--- ----------------------------
-DROP TABLE IF EXISTS `article`;
-CREATE TABLE `article` (
-                           `aid` bigint unsigned NOT NULL AUTO_INCREMENT,
-                           `pid` int DEFAULT NULL,
-                           `title` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL,
-                           `content` varchar(5000) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL,
-                           `type` varchar(20) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL,
-                           PRIMARY KEY (`aid`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=150 DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC;
-
-INSERT INTO `article` VALUES ('150', '1', '小鹏P7', '小鹏汽车智能系统以中控大屏为核心，它除了是一个互联网的入口和终端外，更多的是一个智能化的平台。中控大屏取代了传统中控实体按钮，而代之以一系列的虚拟按钮。小鹏汽车的智能控制系统专注于对车本身的智能控制，而非简单的互联网娱乐。通过中控大屏，可以方便的控制方向盘位置、座椅位置、车灯开关、车窗升降、空调设定等，还可以进行驾驶风格的选择、底盘刚度的调节、制动能量回收强度等的调节等等。', '汽车');
-INSERT INTO `article` VALUES ('151', '1', '如何问答', '应该这样问答！', '问答教程');

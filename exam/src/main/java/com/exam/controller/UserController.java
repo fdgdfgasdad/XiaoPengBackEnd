@@ -102,6 +102,12 @@ public class UserController {
         return userService.getGrade(uid, pid);
     }
 
+    @PostMapping("get_user_grade")
+    public Result getUserGrade(@RequestParam("uid") Integer uid)
+    {
+        return userService.getUserGrade(uid);
+    }
+
     @PostMapping(value = "/fileUpload")
     public Result fileUpload(@RequestParam(value = "file") MultipartFile file, @RequestParam("qid") Integer qid, @RequestParam("uid") Integer uid, @RequestParam("pid") Integer pid) {
 

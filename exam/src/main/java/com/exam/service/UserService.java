@@ -187,9 +187,19 @@ public class UserService {
     public Result getGrade(Integer uid, Integer pid) {
 
         PaperGrade paperGradeByUidPid = paperGradeMapper.getPaperGradeByUidPid(uid, pid);
+        HashMap<String, Double> map = new HashMap<>();
         Double grade = paperGradeByUidPid.getScore();
+        Double intelligibility = paperGradeByUidPid.getIntelligibility();
+        Double integrity = paperGradeByUidPid.getIntegrity();
+        Double logicality = paperGradeByUidPid.getLogicality();
+        Double accuracy = paperGradeByUidPid.getAccuracy();
+        map.put("intelligibility",intelligibility);
+        map.put("integrity", integrity);
+        map.put("logicality", logicality);
+        map.put("accuracy", accuracy);
+        map.put("grade", grade);
         Result result = Result.success();
-        result.setData(grade);
+        result.setData(map);
         return result;
     }
 
@@ -247,18 +257,40 @@ public class UserService {
                 paperGrade.setScore(paperGrade.getScore() + Double.parseDouble(score) / 2);
                 paperGradeMapper.updatePaperGrade(paperGrade);
             }
-            log.info(ans);
-            log.info(intelligibility);
-            log.info(integrity);
-            log.info(logicality);
-            log.info(accuracy);
-            log.info(score);
+
 
         } catch (IOException e) {
             System.out.println("调用python脚本并读取结果时出错：" + e.getMessage());
         }
         Result result = Result.success();
         result.setData(ans);
+        return result;
+    }
+
+    public Result getUserGrade(Integer uid) {
+        List<PaperGrade> paperGradeByUid = paperGradeMapper.getPaperGradeByUid(uid);
+        Double grade = paperGradeByUid.get(0).getScore();
+        Double intelligibility = paperGradeByUid.get(0).getIntelligibility();
+        Double integrity = paperGradeByUid.get(0).getIntegrity();
+        Double logicality = paperGradeByUid.get(0).getLogicality();
+        Double accuracy = paperGradeByUid.get(0).getAccuracy();
+        HashMap<String, Double> map = new HashMap<>();
+
+        for (PaperGrade paperGrade : paperGradeByUid) {
+            grade = grade * 0.3 + paperGrade.getScore() * 0.7;
+            intelligibility = intelligibility * 0.3 + paperGrade.getIntelligibility() * 0.7;
+            integrity = integrity * 0.3 + paperGrade.getIntegrity() * 0.7;
+            logicality = logicality * 0.3 + paperGrade.getLogicality() * 0.7;
+            accuracy = accuracy * 0.3 + paperGrade.getAccuracy() * 0.7;
+        }
+
+        map.put("intelligibility",intelligibility);
+        map.put("integrity", integrity);
+        map.put("logicality", logicality);
+        map.put("accuracy", accuracy);
+        map.put("grade", grade);
+        Result result = Result.success();
+        result.setData(map);
         return result;
     }
 }
