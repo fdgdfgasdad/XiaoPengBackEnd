@@ -96,17 +96,20 @@ public class UserController {
         return userService.getContent(title);
     }
 
-    @PostMapping("get_grade")
+    @GetMapping("get_grade")
     public Result getGrade(@RequestParam("uid") Integer uid, @RequestParam("pid") Integer pid)
     {
         return userService.getGrade(uid, pid);
     }
 
-    @PostMapping("get_user_grade")
+    @GetMapping("get_user_grade")
     public Result getUserGrade(@RequestParam("uid") Integer uid)
     {
         return userService.getUserGrade(uid);
     }
+
+    @GetMapping("getPid")
+    public Result getPid(@RequestParam("uid") Integer uid){ return userService.getPid(uid);}
 
     @PostMapping(value = "/fileUpload")
     public Result fileUpload(@RequestParam(value = "file") MultipartFile file, @RequestParam("qid") Integer qid, @RequestParam("uid") Integer uid, @RequestParam("pid") Integer pid) {

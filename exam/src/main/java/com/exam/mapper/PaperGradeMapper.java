@@ -23,5 +23,8 @@ public interface PaperGradeMapper {
     @Update("update exam.papergrade set intelligibility = #{paperGrade.intelligibility}, integrity = #{paperGrade.integrity}, logicality = #{paperGrade.logicality}, accuracy = #{paperGrade.accuracy}, score = #{paperGrade.score} where rid = #{paperGrade.rid}")
     Integer updatePaperGrade(@Param("paperGrade") PaperGrade paperGrade);
 
+    @Select("select count(*) from exam.papergrade where uid = #{uid}")
+    Integer getPid(@Param("uid") Integer uid);
+
 
 }

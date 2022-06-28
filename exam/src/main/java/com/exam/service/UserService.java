@@ -348,4 +348,12 @@ public class UserService {
         result.setData(map);
         return result;
     }
+
+    public Result getPid(Integer uid) {
+
+        Integer pid = paperGradeMapper.getPid(uid);
+        Result result = Result.success();
+        result.setData(pid);
+        return result;
+    }
 }
