@@ -132,6 +132,18 @@ public class UserService {
 
     }
 
+    public Result getAIQuestionList() {
+        int[][] aiList = { { 400, 401 }, { 402, 403 }, { 404, 406 }, { 405, 407 } };
+        Random r = new Random();
+        int i = r.nextInt(3);
+        List<Question> questionList = new ArrayList<>();
+        questionList.add(questionMapper.getQuestionsByID(aiList[i][0]));
+        questionList.add(questionMapper.getQuestionsByID(aiList[i][1]));
+        Result result = Result.success();
+        result.setData(questionList);
+        return result;
+    }
+
     public Result getAnswerQuestion(Integer page, Integer pid) {
         PageHelper.startPage(page,10);
         List<Question> answerQuestionByPid = questionMapper.getAnswerQuestionByPid(pid);
@@ -145,9 +157,19 @@ public class UserService {
     public Result getQuestionList(Integer selNum, Integer subNum) {
         List<QuestionResult> questionList = new ArrayList<>();
         Random r = new Random();
+        HashMap<Integer, Integer> map = new HashMap<>();
         for (int i = 0; i < selNum; i++)
         {
-            Integer qid = r.nextInt(5) + 1;
+            Integer qid;
+            while (true)
+            {
+                qid = r.nextInt(5) + 1;
+                if (!map.containsKey(qid))
+                {
+                    map.put(qid, 1);
+                    break;
+                }
+            }
             Question question = questionMapper.getSelectiveQuestionsByID(qid);
             QuestionResult questionResult = new QuestionResult();
             questionResult.createQuestion(question);
@@ -156,7 +178,16 @@ public class UserService {
         }
         for (int i = 0; i < subNum; i++)
         {
-            Integer qid = r.nextInt(11) + 300;
+            Integer qid;
+            while (true)
+            {
+                qid = r.nextInt(11) + 300;
+                if (!map.containsKey(qid))
+                {
+                    map.put(qid, 1);
+                    break;
+                }
+            }
             Question question = questionMapper.getSubjectiveQuestionsByID(qid);
             QuestionResult questionResult = new QuestionResult();
             questionResult.createQuestion(question);
@@ -208,22 +239,23 @@ public class UserService {
     public Result getSingleGrade(String path, Integer qid, Integer uid, Integer pid) {
 
         String answerByQid = questionMapper.getAnswerByQid(qid);
-        Result result = pyfileUpload(path, answerByQid, uid, pid);
+        Result result = pyfileUpload(path, answerByQid, uid, pid, qid);
 
 
         return result;
     }
 
-    public Result pyfileUpload(String path, String answer, Integer uid, Integer pid)   {
-        String ans = "";
+    public Result pyfileUpload(String path, String answer, Integer uid, Integer pid, Integer qid)   {
+        String recognitionResult = "";
         String intelligibility;
         String integrity;
         String logicality;
         String accuracy;
         String score;
+        String recognitionScore;
         try {
             //这个方法是类似隐形开启了命令执行器，输入指令执行python脚本
-            String command = "python D:\\file\\main.py" +" --aa="+ path + " --bb=" + answer;
+            String command = "python D:\\file\\recognition.py" +" --filePath="+ path;
             Process p = Runtime.getRuntime().exec(command);
 
             //这种方式获取返回值的方式是需要用python打印输出，然后java去获取命令行的输出，在java返回
@@ -231,16 +263,31 @@ public class UserService {
             InputStreamReader inReader = new InputStreamReader(inStream,Charset.forName("GBK"));
             BufferedReader inBuffer = new BufferedReader(inReader);
 
-            ans = inBuffer.readLine();
+            recognitionResult = inBuffer.readLine();
+            recognitionScore = inBuffer.readLine();
+            log.info(recognitionResult);
 
-            intelligibility = inBuffer.readLine();
-            integrity = inBuffer.readLine();
-            logicality = inBuffer.readLine();
-            accuracy = inBuffer.readLine();
-            score = inBuffer.readLine();
+            if (qid == 399)
+            {
+                Result result = Result.success();
+                result.setData(recognitionResult);
+                return result;
+            }
+
+            String MatchCommand = "python D:\\file\\match.py" + " --recognitionResult=" + recognitionResult
+                    + " --standardAnswer=" + answer + " --recognitionScore=" + recognitionScore;
+            p = Runtime.getRuntime().exec(MatchCommand);
+            inStream = p.getInputStream();
+            InputStreamReader matchInReader = new InputStreamReader(inStream,Charset.forName("GBK"));
+            BufferedReader matchInBuffer = new BufferedReader(matchInReader);
+
+            intelligibility = matchInBuffer.readLine();
+            integrity = matchInBuffer.readLine();
+            logicality = matchInBuffer.readLine();
+            accuracy = matchInBuffer.readLine();
+            score = matchInBuffer.readLine();
 
             PaperGrade paperGrade = paperGradeMapper.getPaperGradeByUidPid(uid, pid);
-            log.info(ans);
             log.info(intelligibility);
             log.info(integrity);
             log.info(logicality);
@@ -271,7 +318,7 @@ public class UserService {
             System.out.println("调用python脚本并读取结果时出错：" + e.getMessage());
         }
         Result result = Result.success();
-        result.setData(ans);
+        result.setData(recognitionResult);
         return result;
     }
 

@@ -149,8 +149,11 @@ public class UserController {
 
     }
 
-
-
+    @GetMapping("getAIQuestionList")
+    public Result getAIQuestionList()
+    {
+        return userService.getAIQuestionList();
+    }
 
 }
 
