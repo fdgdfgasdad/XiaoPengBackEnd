@@ -1,7 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <dataSource name="exam@localhost">
-  <database-model serializer="dbm" dbms="MYSQL" family-id="MYSQL" format-version="4.23">
-    <root id="1"/>
+  <database-model serializer="dbm" dbms="MYSQL" family-id="MYSQL" format-version="4.20">
+    <root id="1">
+      <ServerVersion>8.0.27</ServerVersion>
+      <DefaultEngine>InnoDB</DefaultEngine>
+      <DefaultTmpEngine>InnoDB</DefaultTmpEngine>
+      <DefaultCasing>lower/lower</DefaultCasing>
+    </root>
     <schema id="2" parent="1" name="exam">
       <Current>1</Current>
       <Collation>utf8mb4_0900_ai_ci</Collation>
@@ -886,15 +891,211 @@
     </collation>
     <user id="282" parent="1" name="mysql.infoschema">
       <Host>localhost</Host>
+      <ObjectGrants>SELECT
+SYSTEM_USER
+</ObjectGrants>
     </user>
     <user id="283" parent="1" name="mysql.session">
       <Host>localhost</Host>
+      <ObjectGrants>SHUTDOWN,SUPER
+BACKUP_ADMIN,CLONE_ADMIN,CONNECTION_ADMIN,PERSIST_RO_VARIABLES_ADMIN,SESSION_VARIABLES_ADMIN,SYSTEM_USER,SYSTEM_VARIABLES_ADMIN
+SELECT|performance_schema
+SELECT|mysql.user
+</ObjectGrants>
     </user>
     <user id="284" parent="1" name="mysql.sys">
       <Host>localhost</Host>
+      <ObjectGrants>SYSTEM_USER
+TRIGGER|sys
+SELECT|sys.sys_config
+</ObjectGrants>
     </user>
     <user id="285" parent="1" name="root">
       <Host>localhost</Host>
+      <ObjectGrants>SELECT,INSERT,UPDATE,DELETE,CREATE,DROP,RELOAD,SHUTDOWN,PROCESS,FILE,REFERENCES,INDEX,ALTER,SHOW DATABASES,SUPER,CREATE TEMPORARY TABLES,LOCK TABLES,EXECUTE,REPLICATION SLAVE,REPLICATION CLIENT,CREATE VIEW,SHOW VIEW,CREATE ROUTINE,ALTER ROUTINE,CREATE USER,EVENT,TRIGGER,CREATE TABLESPACE,CREATE ROLE,DROP ROLE!
+</ObjectGrants>
     </user>
+    <table id="286" parent="2" name="article">
+      <Collation>utf8_general_ci</Collation>
+    </table>
+    <table id="287" parent="2" name="choice">
+      <Collation>utf8_general_ci</Collation>
+    </table>
+    <table id="288" parent="2" name="exampaper">
+      <Collation>utf8_general_ci</Collation>
+    </table>
+    <table id="289" parent="2" name="papergrade">
+      <Collation>utf8_general_ci</Collation>
+    </table>
+    <table id="290" parent="2" name="question">
+      <Collation>utf8_general_ci</Collation>
+    </table>
+    <table id="291" parent="2" name="user">
+      <Collation>utf8mb4_unicode_ci</Collation>
+    </table>
+    <column id="292" parent="286" name="aid">
+      <Position>1</Position>
+      <DataType>bigint unsigned|0s</DataType>
+      <NotNull>1</NotNull>
+      <SequenceIdentity>null</SequenceIdentity>
+    </column>
+    <column id="293" parent="286" name="pid">
+      <Position>2</Position>
+      <DataType>int|0s</DataType>
+    </column>
+    <column id="294" parent="286" name="title">
+      <Position>3</Position>
+      <DataType>varchar(255)|0s</DataType>
+    </column>
+    <column id="295" parent="286" name="content">
+      <Position>4</Position>
+      <DataType>varchar(5000)|0s</DataType>
+    </column>
+    <column id="296" parent="286" name="type">
+      <Position>5</Position>
+      <DataType>varchar(20)|0s</DataType>
+    </column>
+    <key id="297" parent="286" name="PRIMARY">
+      <NameSurrogate>1</NameSurrogate>
+      <ColNames>aid</ColNames>
+      <Primary>1</Primary>
+    </key>
+    <column id="298" parent="287" name="cid">
+      <Position>1</Position>
+      <DataType>bigint unsigned|0s</DataType>
+      <NotNull>1</NotNull>
+      <SequenceIdentity>null</SequenceIdentity>
+    </column>
+    <column id="299" parent="287" name="answer">
+      <Position>2</Position>
+      <DataType>bit(1)|0s</DataType>
+    </column>
+    <column id="300" parent="287" name="content">
+      <Position>3</Position>
+      <DataType>varchar(255)|0s</DataType>
+    </column>
+    <column id="301" parent="287" name="qid">
+      <Position>4</Position>
+      <DataType>bigint|0s</DataType>
+    </column>
+    <index id="302" parent="287" name="FKcaq6r76cswke5b9fk6fyx3y5w">
+      <ColNames>qid</ColNames>
+      <Type>btree</Type>
+    </index>
+    <key id="303" parent="287" name="PRIMARY">
+      <NameSurrogate>1</NameSurrogate>
+      <ColNames>cid</ColNames>
+      <Primary>1</Primary>
+    </key>
+    <column id="304" parent="288" name="pid">
+      <Position>1</Position>
+      <DataType>bigint unsigned|0s</DataType>
+      <NotNull>1</NotNull>
+      <SequenceIdentity>null</SequenceIdentity>
+    </column>
+    <column id="305" parent="288" name="description">
+      <Position>2</Position>
+      <DataType>varchar(255)|0s</DataType>
+    </column>
+    <column id="306" parent="288" name="name">
+      <Position>3</Position>
+      <DataType>varchar(255)|0s</DataType>
+    </column>
+    <key id="307" parent="288" name="PRIMARY">
+      <NameSurrogate>1</NameSurrogate>
+      <ColNames>pid</ColNames>
+      <Primary>1</Primary>
+    </key>
+    <column id="308" parent="289" name="rid">
+      <Position>1</Position>
+      <DataType>bigint unsigned|0s</DataType>
+      <NotNull>1</NotNull>
+      <SequenceIdentity>null</SequenceIdentity>
+    </column>
+    <column id="309" parent="289" name="all_count">
+      <Position>2</Position>
+      <DataType>int|0s</DataType>
+    </column>
+    <column id="310" parent="289" name="grade">
+      <Position>3</Position>
+      <DataType>int|0s</DataType>
+    </column>
+    <column id="311" parent="289" name="wrong_count">
+      <Position>4</Position>
+      <DataType>int|0s</DataType>
+    </column>
+    <column id="312" parent="289" name="pid">
+      <Position>5</Position>
+      <DataType>bigint|0s</DataType>
+    </column>
+    <column id="313" parent="289" name="uid">
+      <Position>6</Position>
+      <DataType>bigint|0s</DataType>
+    </column>
+    <index id="314" parent="289" name="FKmblvyjlk9x7rrm7mvqtbedycc">
+      <ColNames>pid</ColNames>
+      <Type>btree</Type>
+    </index>
+    <index id="315" parent="289" name="FKsfc96jri4p4ukkdaitjt5rk13">
+      <ColNames>uid</ColNames>
+      <Type>btree</Type>
+    </index>
+    <key id="316" parent="289" name="PRIMARY">
+      <NameSurrogate>1</NameSurrogate>
+      <ColNames>rid</ColNames>
+      <Primary>1</Primary>
+    </key>
+    <column id="317" parent="290" name="qid">
+      <Position>1</Position>
+      <DataType>bigint unsigned|0s</DataType>
+      <NotNull>1</NotNull>
+      <SequenceIdentity>null</SequenceIdentity>
+    </column>
+    <column id="318" parent="290" name="pid">
+      <Position>2</Position>
+      <DataType>int|0s</DataType>
+    </column>
+    <column id="319" parent="290" name="content">
+      <Position>3</Position>
+      <DataType>varchar(255)|0s</DataType>
+    </column>
+    <column id="320" parent="290" name="type">
+      <Position>4</Position>
+      <DataType>varchar(255)|0s</DataType>
+    </column>
+    <column id="321" parent="290" name="answer">
+      <Position>5</Position>
+      <DataType>varchar(255)|0s</DataType>
+    </column>
+    <key id="322" parent="290" name="PRIMARY">
+      <NameSurrogate>1</NameSurrogate>
+      <ColNames>qid</ColNames>
+      <Primary>1</Primary>
+    </key>
+    <column id="323" parent="291" name="uid">
+      <Position>1</Position>
+      <DataType>int unsigned|0s</DataType>
+      <NotNull>1</NotNull>
+      <SequenceIdentity>null</SequenceIdentity>
+    </column>
+    <column id="324" parent="291" name="username">
+      <Position>2</Position>
+      <DataType>varchar(255)|0s</DataType>
+      <NotNull>1</NotNull>
+    </column>
+    <column id="325" parent="291" name="password">
+      <Position>3</Position>
+      <DataType>varchar(255)|0s</DataType>
+      <NotNull>1</NotNull>
+    </column>
+    <column id="326" parent="291" name="phone">
+      <Position>4</Position>
+      <DataType>varchar(255)|0s</DataType>
+    </column>
+    <key id="327" parent="291" name="PRIMARY">
+      <NameSurrogate>1</NameSurrogate>
+      <ColNames>uid</ColNames>
+      <Primary>1</Primary>
+    </key>
   </database-model>
 </dataSource>

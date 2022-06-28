@@ -225,12 +225,14 @@ public class UserService {
             //这个方法是类似隐形开启了命令执行器，输入指令执行python脚本
             String command = "python D:\\file\\main.py" +" --aa="+ path + " --bb=" + answer;
             Process p = Runtime.getRuntime().exec(command);
+
             //这种方式获取返回值的方式是需要用python打印输出，然后java去获取命令行的输出，在java返回
             InputStream inStream = p.getInputStream();
             InputStreamReader inReader = new InputStreamReader(inStream,Charset.forName("GBK"));
             BufferedReader inBuffer = new BufferedReader(inReader);
 
             ans = inBuffer.readLine();
+
             intelligibility = inBuffer.readLine();
             integrity = inBuffer.readLine();
             logicality = inBuffer.readLine();
@@ -238,6 +240,12 @@ public class UserService {
             score = inBuffer.readLine();
 
             PaperGrade paperGrade = paperGradeMapper.getPaperGradeByUidPid(uid, pid);
+            log.info(ans);
+            log.info(intelligibility);
+            log.info(integrity);
+            log.info(logicality);
+            log.info(accuracy);
+            log.info(score);
             if (paperGrade == null)
             {
                 paperGrade = new PaperGrade();
