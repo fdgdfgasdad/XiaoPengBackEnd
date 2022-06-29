@@ -108,6 +108,9 @@ public class UserController {
         return userService.getUserGrade(uid);
     }
 
+    @GetMapping("get_recent_grade")
+    public Result getRecentGrade(@RequestParam("uid") Integer uid) { return userService.getRecentGrade(uid);}
+
     @GetMapping("getPid")
     public Result getPid(@RequestParam("uid") Integer uid){ return userService.getPid(uid);}
 

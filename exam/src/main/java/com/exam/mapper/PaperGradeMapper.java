@@ -26,5 +26,8 @@ public interface PaperGradeMapper {
     @Select("select count(*) from exam.papergrade where uid = #{uid}")
     Integer getPid(@Param("uid") Integer uid);
 
+    @Select("select * from exam.papergrade where uid = #{uid} order by rid desc limit 5;")
+    List<PaperGrade> getRecentGrade(@Param("uid") Integer uid);
+
 
 }

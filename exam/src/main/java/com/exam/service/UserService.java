@@ -356,4 +356,18 @@ public class UserService {
         result.setData(pid);
         return result;
     }
+
+    public Result getRecentGrade(Integer uid) {
+
+        List<PaperGrade> recentGrade = paperGradeMapper.getRecentGrade(uid);
+        Double[] grade = new Double[5];
+        log.info(String.valueOf(recentGrade.size()));
+        for (int i = 4; i >= 0; i--)
+        {
+            grade[i] = recentGrade.get(4-i).getScore();
+        }
+        Result result = Result.success();
+        result.setData(grade);
+        return result;
+    }
 }
