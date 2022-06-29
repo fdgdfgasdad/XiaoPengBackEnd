@@ -351,7 +351,7 @@ public class UserService {
 
     public Result getPid(Integer uid) {
 
-        Integer pid = paperGradeMapper.getPid(uid);
+        Integer pid = paperGradeMapper.getPid(uid) + 1;
         Result result = Result.success();
         result.setData(pid);
         return result;
